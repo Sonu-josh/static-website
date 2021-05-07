@@ -199,7 +199,7 @@
 
       <!--Grid column-->
       <div class="col-md-9 mb-md-0 mb-5">
-          <form id="gform" name="contact-form" action="https://script.google.com/macros/s/AKfycbwfpdTQGyQ4JMjm639L8a1TmnRxAJjhzIqmcj618olYK-x0RbpeYXZpnDxu-2jSfVJ8NA/exec" method="POST">
+          <form id="submit-form"  action="" >
 
               <!--Grid row-->
               <div class="row">
@@ -208,8 +208,8 @@
                   <div class="col-md-6">
                       <div class="md-form mb-0">
                         <label for="name" class="">Your name</label>
-                          <input type="text" id="fname" name="name" class="form-control">
-                          
+                          <input type="text" id="fname" onkeyup="nameValidation()" name="name" class="form-control" required>
+                          <p id="name-alert" style="color: red;"></p>
                       </div>
                   </div>
                   <!--Grid column-->
@@ -218,7 +218,7 @@
                   <div class="col-md-6">
                       <div class="md-form mb-0">
                         <label for="email" class="">Your email</label>
-                          <input type="email" id="email" onkeydown="mailValidation()" name="email" class="form-control">
+                          <input type="email" id="email" onkeyup="mailValidation()" name="email" class="form-control" required>
                           <p id="email-alert" style="color: red;"></p>
                           
                       </div>
@@ -232,7 +232,7 @@
                 <div class="col-md-12">
                     <div class="md-form mb-0">
                       <label for="subject" class="">Phone Number</label>
-                        <input type="text" onkeydown="phoneNumberValidate()" name="phone" class="form-control" id="phone">
+                        <input type="text" onkeyup="phoneNumberValidate()" name="phone" class="form-control" id="phone" required>
                         <p id="phone-alert" style="color: red;"></p>
                     </div>
                 </div>
@@ -244,7 +244,7 @@
                  <div class="col-md-12">
                       <div class="md-form mb-0">
                         <label for="subject" class="">Subject</label>
-                          <input type="text" id="subject" name="subject" class="form-control">
+                          <input type="text" id="subject" name="subject" class="form-control" required>
                           
                       </div>
                   </div>
@@ -259,9 +259,10 @@
 
                       <div class="md-form">
                         <label for="message">Your message</label>
-                          <textarea type="text" id="message" name="message" rows="2" class="form-control md-textarea"></textarea>
+                          <textarea type="text" id="message" name="message" rows="2" class="form-control md-textarea" required>
+                          </textarea>                          
+                          <input type="submit" value="submit" >
                           
-                          <input type="submit" value="submit">
                       </div>
 
                   </div>
@@ -304,13 +305,6 @@
   </div>
 
 </section>
-
-
-
-
-
-
-
 <footer class="bg-dark">
   <div class="class container">
     <div class="class row">
@@ -325,24 +319,52 @@
     </div>
   </div>
 </footer>
+ 
+
+
+
+
+
+
 
     
 
 
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/2124099fd4.js" crossorigin="anonymous"></script>
 <script>
+  var  flag1 = false;
+  var flag2 =false;
+  var flag3=false;
+
+    function nameValidation(){
+      var pattern = /^[A-Za-z]+$/;
+      var name = document.getElementById("fname").value;
+      if(name.match(pattern))
+      {
+          document.getElementById("name-alert").innerHTML=""
+          flag1=true
+        }else{
+          document.getElementById("name-alert").innerHTML="Invalid Name"
+          flag1=false
+        }
+    }
+
+
+
     function phoneNumberValidate(){
     var pattern = /^\d{10}$/;
     var phoneNumber = document.getElementById('phone').value;
     if(phoneNumber.match(pattern))
         {
           document.getElementById("phone-alert").innerHTML=""
+          flag2=true
         }else{
           document.getElementById("phone-alert").innerHTML="Invalid Phone Number"
+          flag2=flase
         }
    }
    function mailValidation(){
@@ -351,13 +373,46 @@
      var emailAlert = document.getElementById('email-alert');
      if(pattern.test(email)){
        emailAlert.innerHTML="";
+       flag3=true
      }else{
        emailAlert.innerHTML="invalid email";
+       flag3=false
      }
-  
+       }
 
+    
+    
 
-   }
+  function checkValidate(){
+    if(flag1==true&& flag2==true&& flag3==true){
+      return true;
+    }else{
+      alert("Check Form Data");
+      return false
+    }
+  }
+  $("#submit-form").submit((e)=>{
+      e.preventDefault()
+      var returnValue = checkValidate();
+      if(returnValue== true){ 
+      $.ajax({
+          url:"https://script.google.com/macros/s/AKfycbwfpdTQGyQ4JMjm639L8a1TmnRxAJjhzIqmcj618olYK-x0RbpeYXZpnDxu-2jSfVJ8NA/exec",
+          data:$("#submit-form").serialize(),
+          method:"post",
+          success:function (response){
+              alert("Form submitted successfully")
+              window.location.reload()
+              //window.location.href="https://google.com"
+          },
+          error:function (err){
+              alert("Something Error")
+
+          }
+      })
+    }
+  })
+
+   
 </script>
 
 </body>
