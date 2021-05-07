@@ -369,7 +369,12 @@
         {
           document.getElementById("phone-alert").innerHTML=""
           flag2=true
-        }else{
+        }else if(phoneNumber.length>10)
+        {
+          document.getElementById("phone-alert").innerHTML="More than 10 digits not allowed"
+          flag2=flase
+        }else
+        {
           document.getElementById("phone-alert").innerHTML="Invalid Phone Number"
           flag2=flase
         }
